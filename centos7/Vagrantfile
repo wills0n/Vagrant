@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+
+  (1..2).each do |i|
+    config.vm.define "host#{i}" do |host|
+      host.vm.box = "centos/7"
+      host.vm.hostname = "host#{i}"
+      host.vm.network "public_network", ip: "192.168.1.101#{i}", bridge: ["en1: Realtek PCIe GBE Family Controller"]
+
+      host.vm.provider "virtualbox" do |vb|
+        vb.name = "server#{i}"
+        vb.cpus = 1
+        vb.memory = "512"
+      end
+      host.vm.provision "shell", path: "install.sh"
+      
+      
+    end
+  end
+end
